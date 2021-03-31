@@ -50,23 +50,69 @@ export class RCA extends React.Component {
   }
 
   loadData() {
-    axios.get(process.env.REACT_APP_BACKEND_HOST + '/v1/rca?source=' + this.state.source + '&time_point=' + this.state.time_point)
-      .then((response) => {
-        this.setState({
-          rca: response.data,
-          loading: false
-        }, () => {
-          const div = document.getElementById('chart-area');
-          div.style.visibility = 'visible';
-          this.generateGraph(this.state.rca[0]);
-          setTimeout(() => {
-            visualization.scaleGraph(this.state.svg, this.state.g, this.zoom);
-          }, 2000);
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios.get(process.env.REACT_APP_BACKEND_HOST + '/v1/rca?source=' + this.state.source + '&time_point=' + this.state.time_point)
+    //   .then((response) => {
+    //     this.setState({
+    //       rca: response.data,
+    //       loading: false
+    //     }, () => {
+    //       const div = document.getElementById('chart-area');
+    //       div.style.visibility = 'visible';
+    //       this.generateGraph(this.state.rca[0]);
+    //       setTimeout(() => {
+    //         visualization.scaleGraph(this.state.svg, this.state.g, this.zoom);
+    //       }, 2000);
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+
+      this.setState({
+        loading: false,
+        rca: [
+              {
+                  "nodes": [{
+                    "id": "1",
+                    "kind": "cluster",
+                    "origin": "kubernetes",
+                    "properties": {
+                        "name": "cluster"
+                    }
+                  }, {"id": "2",
+                      "kind": "pod",
+                      "origin": "kubernetes",
+                      "properties": {
+                          "name": "node"
+                      }
+                    }],
+                  "links": [{        
+                    "id": "aeffcea5-01ee-5c90-a16a-6ba296e0f3f7",
+                    "source": "1",
+                    "target": "2"
+                }],
+                  "score": 0.555
+              },
+              {
+                  "nodes": [],
+                  "links": [],
+                  "score": 0.555
+              },
+              {
+                  "nodes": [],
+                  "links": [],
+                  "score": 0.555
+              }
+          ]
+     }, () => {
+     const div = document.getElementById('chart-area');
+       div.style.visibility = 'visible';
+       this.generateGraph(this.state.rca[0]);
+       setTimeout(() => {
+        visualization.scaleGraph(this.state.svg, this.state.g, this.zoom);
+       }, 2000);
+     })
   }
 
   prepareSvg() {
